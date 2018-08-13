@@ -1,0 +1,50 @@
+切片
+====================================
+
+.. code-block:: bash 
+
+在Mongodb里面存在另一种集群，就是分片技术,可以满足MongoDB数据量大量增长的需求。
+
+当MongoDB存储海量的数据时，一台机器可能不足以存储数据，也可能不足以提供可接受的读写吞吐
+量。这时，我们就可以通过在多台机器上分割数据，使得数据库系统能存储和处理更多的数据。
+
+设置
+-----------------------------------------
+
+.. code-block:: bash 
+
+    # 规划
+
+    Shard Server 1：27020
+    Shard Server 2：27021
+    Shard Server 3：27022
+    Shard Server 4：27023
+    Config Server ：27100
+    Route Process：40000
+
+    # 启动shard server 
+
+    [root@100 /]# mkdir -p /www/mongoDB/shard/s0
+    [root@100 /]# mkdir -p /www/mongoDB/shard/s1
+    [root@100 /]# mkdir -p /www/mongoDB/shard/s2
+    [root@100 /]# mkdir -p /www/mongoDB/shard/s3
+    [root@100 /]# mkdir -p /www/mongoDB/shard/log
+    [root@100 /]# /usr/local/mongoDB/bin/mongod --port 27020 --dbpath=/www/mongoDB/shard/s0 --logpath=/www/mongoDB/shard/log/s0.log --logappend --fork
+    ....
+    [root@100 /]# /usr/local/mongoDB/bin/mongod --port 27023 --dbpath=/www/mongoDB/shard/s3 --logpath=/www/mongoDB/shard/log/s3.log --logappend --fork
+
+    # 启动config server 
+
+    [root@100 /]# mkdir -p /www/mongoDB/shard/config
+    [root@100 /]# /usr/local/mongoDB/bin/mongod --port 27100 --dbpath=/www/mongoDB/shard/config --logpath=/www/mongoDB/shard/log/config.log --logappend --fork
+
+    # 启动route process 
+
+    /usr/local/mongoDB/bin/mongos --port 40000 --configdb localhost:27100 --fork --logpath=/www/mongoDB/shard/log/route.log --chunkSize 500
+
+    # 配置sharding 
+    /usr/local/mongoDB/bin/mongo admin --port 40000
+    db.runCommand({ addshard:"localhost:27020" })
+    db.runCommand({ enablesharding:"test" }) #设置分片存储的数据库
+    db.runCommand({ shardcollection: "test.log", key: { id:1,time:1}})
+

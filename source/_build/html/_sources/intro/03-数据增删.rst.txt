@@ -1,0 +1,129 @@
+数据增删
+=================================
+
+数据库创建
+------------------------------------------
+
+.. code-block:: mongo 
+
+    > use mongo 
+    switched to db mongo
+    > db 
+    mongo
+    > show dbs 
+    admin  (empty)
+    local  0.078GB
+    > db.mongo.insert({"name":"zhojiedi","age":"26"})
+    WriteResult({ "nInserted" : 1 })
+    > show dbs
+    admin  (empty)
+    local  0.078GB
+    mongo  0.078GB
+
+删除数据库
+------------------------------------------
+
+.. code-block:: bash 
+
+    > use mongo 
+    switched to db mongo
+    > db.dropDatabase()
+    { "dropped" : "mongo", "ok" : 1 }
+    > show dbs 
+    admin  (empty)
+    local  0.078GB
+
+删除集合
+-----------------------------------
+
+.. code-block:: bash 
+
+    db.collection.drop()  
+
+
+插入文档
+-----------------------------------
+
+.. code-block:: bash
+
+    > use test
+    switched to db test
+    > db.col.insert({title: 'MongoDB 教程',
+    ... description: 'MongoDB 是一个 Nosql 数据库',
+    ... by: 'MongoDB中文网', 
+    ... url: 'http://www.mongodb.org.cn', 
+    ... tags: ['mongodb', 'database', 'NoSQL'],
+    ... likes: 100  
+    ... })
+    WriteResult({ "nInserted" : 1 })
+    > db.col.find()
+    { "_id" : ObjectId("5b70eea6f482a2c3004fbd38"), 
+    "title" : "MongoDB 教程",
+    "description" : "MongoDB 是一个 Nosql 数据库",
+    "by" : "MongoDB中文网",
+    "url" : "http://www.mongodb.org.cn",
+        "tags" : [ "mongodb", "database", "NoSQL" ],
+        "likes" : 100 }
+
+更新文档
+-----------------------------------
+
+.. code-block:: bash 
+
+    > db.col.insert({title: 'MongoDB 教程',
+    ... description: 'MongoDB 是一个 Nosql 数据库',
+    ... by: 'MongoDB中文网', 
+    ... url: 'http://www.mongodb.org.cn', 
+    ... tags: ['mongodb', 'database', 'NoSQL'],
+    ... likes: 100  
+    ... })
+    WriteResult({ "nInserted" : 1 })
+    > db.col.find()
+    { "_id" : ObjectId("5b70eea6f482a2c3004fbd38"), "title" : "MongoDB 教程", "description" : "MongoDB 是一个 Nosql 数据库", "by" : "MongoDB中文网", "url" : "http://www.mongodb.org.cn", "tags" : [ "mongodb", "database", "NoSQL" ], "likes" : 100 }
+
+    > db.col.update({'title':'MongoDB 教程'},{$set:{'title':'MongoDB'}})
+    WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+    > db.col.find().pretty()
+    {
+            "_id" : ObjectId("5b70eea6f482a2c3004fbd38"),
+            "title" : "MongoDB",
+            "description" : "MongoDB 是一个 Nosql 数据库",
+            "by" : "MongoDB中文网",
+            "url" : "http://www.mongodb.org.cn",
+            "tags" : [
+                    "mongodb",
+                    "database",
+                    "NoSQL"
+            ],
+            "likes" : 100
+    }
+    {
+            "_id" : ObjectId("5b70efcbf482a2c3004fbd39"),
+            "title" : "Mongodb 教程",
+            "description" : "MongoDB 是一个 Nosql 数据库",
+            "by" : "Mongodb中文网",
+            "url" : "http://www.mongodb.org.cn",
+            "tags" : [
+                    "mongodb",
+                    "database",
+                    "NoSQL"
+            ],
+            "likes" : 100
+    }
+
+删除文档
+-----------------------------------
+
+.. code-block:: bash
+
+    > db.col.remove({"title":'MongoDB 教程'})
+    WriteResult({ "nRemoved" : 0 })
+
+删除所有文档
+-----------------------------------
+
+.. code-block:: bash
+
+    > db.col.remove({})
+   
+

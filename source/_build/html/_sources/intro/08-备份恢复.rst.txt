@@ -1,0 +1,16 @@
+备份恢复
+=================================
+
+备份
+------------------------------
+
+.. code-block:: bash 
+
+    >mongodump -h dbhost -d dbname -o dbdirectory  
+
+还原
+--------------------------------
+
+.. code-block:: bash 
+
+    >mongorestore -h dbhost -d dbname --directoryperdb dbdirectory 
