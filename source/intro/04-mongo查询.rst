@@ -36,3 +36,9 @@ sort
 
     db.COLLECTION_NAME.find().sort({KEY:1}) 
 
+聚合
+------------------------------------------------------
+
+.. code-block:: bash 
+
+    db.mycol.aggregate([{$group : {_id : "$by_user", num_tutorial : {$sum : 1}}}]) 
